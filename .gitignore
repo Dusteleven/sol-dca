@@ -1,0 +1,28 @@
+# Node modules
+node_modules/
+
+# Build artifacts
+dist/
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+
+# Wallet keys
+wallets/*.json
+
+# Environment variables
+.env
+
+# IDE configs
+.vscode/
+.idea/
+
+# OS/system files
+.DS_Store
+Thumbs.db
+
+# Lockfiles
+yarn.lock
+package-json.lock
