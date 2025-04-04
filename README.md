@@ -33,7 +33,7 @@ sol-dca/
 ### 1. Clone & install
 
 ```bash
-git clone <your-repo>
+git clone https://github.com/Dusteleven/sol-dca.git
 cd sol-dca
 yarn install
 ```
