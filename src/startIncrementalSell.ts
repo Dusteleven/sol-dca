@@ -70,10 +70,18 @@ export async function startIncrementalSell({
   connection,
   wallet,
   prudentReserveSOL = 0.1,
+  waitMinMins = 30,
+  waitMaxMins = 60,
+  minSOL = 0.1,
+  maxSOL = 0.2
 }: {
   connection: Connection;
   wallet: Keypair;
   prudentReserveSOL: number;
+  waitMinMins?: number;
+  waitMaxMins?: number;
+  minSOL?: number;
+  maxSOL?: number;
 }) {
   const logPath = path.resolve(
     __dirname,
@@ -92,14 +100,14 @@ export async function startIncrementalSell({
       const reserveLamports = prudentReserveSOL * LAMPORTS_PER_SOL;
       const excessLamports = balance - reserveLamports;
 
-      if (excessLamports < 0.1 * LAMPORTS_PER_SOL) {
+      if (excessLamports < 0.000005 * LAMPORTS_PER_SOL) {
         log(`💤 No excess SOL. Retrying in 15 minutes.`);
         await sleep(15 * 60 * 1000);
         continue;
       }
 
       const randomSellSOL = Math.min(
-        randomInRange(0.1, 0.2),
+        randomInRange(minSOL, maxSOL),
         excessLamports / LAMPORTS_PER_SOL
       );
       const sellAmountLamports = Math.floor(randomSellSOL * LAMPORTS_PER_SOL);
@@ -172,7 +180,7 @@ export async function startIncrementalSell({
       log(`❌ Error occurred: ${err.message || err}`);
     }
 
-    const waitMinutes = randomInRange(30, 60);
+    const waitMinutes = randomInRange(waitMinMins, waitMaxMins);
     log(`🕒 Waiting ${waitMinutes.toFixed(1)} minutes until next attempt`);
     await sleep(waitMinutes * 60 * 1000);
   }
