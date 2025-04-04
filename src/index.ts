@@ -4,8 +4,8 @@ import fs from 'fs';
 
 const walletPath = process.env.WALLET || './wallets/wallet1.json';
 const reserve = Number(process.env.PRUDENT_RESERVE || 0.1);
-const waitMinMins = Number(process.env.MIN_MINS || 1);
-const waitMaxMins = Number(process.env.MAX_MINS || 5);
+const waitMinMins = Number(process.env.MIN_MINS || 30);
+const waitMaxMins = Number(process.env.MAX_MINS || 60);
 const minSOL = Number(process.env.MIN_SOL || 0.1);
 const maxSOL = Number(process.env.MAX_SOL || 0.2);
 
