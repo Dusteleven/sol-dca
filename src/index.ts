@@ -15,4 +15,8 @@ startIncrementalSell({
   connection,
   wallet: keypair,
   prudentReserveSOL: reserve,
+  waitMinMins: 1,
+  waitMaxMins: 5,
+  minSOL: 0.1,
+  maxSOL: 0.2
 });
