@@ -1,0 +1,18 @@
+[Unit]
+Description=SOL DCA Service for Wallet 1
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/sol-dca
+ExecStart=/usr/bin/node dist/index.js
+Environment=WALLET=./wallets/wallet1.json
+Environment=PRUDENT_RESERVE=0.1
+Restart=always
+RestartSec=10
+StandardOutput=append:/home/ubuntu/sol-dca/logs/wallet1.log
+StandardError=append:/home/ubuntu/sol-dca/logs/wallet1.log
+
+[Install]
+WantedBy=multi-user.target
