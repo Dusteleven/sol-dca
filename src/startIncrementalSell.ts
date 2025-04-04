@@ -110,22 +110,22 @@ export async function startIncrementalSell({
       const quoteRes = await fetch(
         `${JUPITER_QUOTE_URL}?inputMint=${SOL_MINT}&outputMint=${USDC_MINT}&amount=${sellAmountLamports}&slippageBps=50&restrictIntermediateTokens=true`
       );
-      const quoteData = await quoteRes.json();
+      const quote = await quoteRes.json();
 
-      if (!quoteData?.routes?.[0]) {
-        log(`⚠️ No route found for ${randomSellSOL.toFixed(9)} SOL`);
+      if (!quote || !quote.routePlan) {
+        log(`⚠️ Quote response missing route plan.`);
         await sleep(5 * 60 * 1000);
         continue;
       }
 
-      // 2. Swap
+      // 2. Post to /swap using the entire quote response
       const swapRes = await fetch(JUPITER_SWAP_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          quoteResponse: quoteData,
+          quoteResponse: quote,
           userPublicKey: wallet.publicKey.toBase58(),
           dynamicSlippage: true,
           dynamicComputeUnitLimit: true,
@@ -137,8 +137,13 @@ export async function startIncrementalSell({
           },
         }),
       });
-
       const swapData = await swapRes.json();
+
+      if (!swapData.swapTransaction) {
+        log(`❌ Swap transaction missing in response`);
+        continue;
+      }
+      
       const txBase64 = swapData.swapTransaction;
 
       if (!txBase64) {
