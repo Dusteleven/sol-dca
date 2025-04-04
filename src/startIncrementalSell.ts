@@ -95,7 +95,6 @@ export async function startIncrementalSell({
     const timestamp = new Date().toISOString();
     fs.appendFileSync(logPath, `[${timestamp}] ${msg}\n`);
     sendDiscordAlert(`[${wallet.publicKey.toBase58()}] ${msg}`);
-    console.log(`[${timestamp}] ${msg}`);
   };
 
   while (true) {
